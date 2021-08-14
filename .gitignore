@@ -3,6 +3,7 @@ figures/
 meeting_notes/
 doc/
 documentation/
+img/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
