@@ -1,7 +1,26 @@
 import cv2
 import mediapipe as mp
+from tkinter import Tk, Label
+import threading
+from datetime import datetime
+
+class KeyDetector(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.start()
+    
+    def callback(self):
+        self.root.quit()
+    
+    def run(self):
+        self.root = Tk()
+        # self.root.withdraw()
+        self.root.bind('<Key>', key_pressed)
+        self.root.mainloop()
 
 def main():
+
+    detector = KeyDetector()
 
     mp_drawing = mp.solutions.drawing_utils
     mp_hands = mp.solutions.hands
@@ -11,7 +30,7 @@ def main():
     cap = cv2.VideoCapture(0)
     with mp_hands.Hands(
         min_detection_confidence=0.5,
-        min_tracking_confidence=0.5) as hands:
+        min_tracking_confidence=0.2) as hands:
         while cap.isOpened():
             success, image = cap.read()
             if not success:
@@ -41,6 +60,10 @@ def main():
             if cv2.waitKey(5) & 0xFF == 27:
                 break
     cap.release()
+
+def key_pressed(event):
+    dt = datetime.now()
+    print(event.char + ', ' + str(dt))
 
 if __name__ == '__main__':
     main()
